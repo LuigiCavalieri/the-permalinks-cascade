@@ -5,9 +5,9 @@ Donate link: https://www.paypal.com/donate?hosted_button_id=GHSUR84FRCFDC
 Contributors: _luigi
 Tags: html site map, google sitemap, news sitemap, lists, blocks 
 Requires at least: 5.8
-Tested up to: 5.8.1
+Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -144,12 +144,16 @@ No, it cannot. The use of such metadata has become obsolete by now.
 
 == Upgrade Notice ==
 
-= 2.0.2 =
+= 2.0.3 =
 
-The Permalinks Cascade is available on WordPress.org.
+Added a superuser mini-feature.
 
 
 == Changelog ==
+
+= 2.0.3 (4 November 2021) =
+
+Now you can move the plugin's admin menu to a parent menu of your choice. In [this article](https://luigicavalieri.com/the-permalinks-cascade/help/moving-admin-menu/) is explained how.
 
 = 2.0.2 (4 October 2021) =
 
