@@ -66,15 +66,15 @@ class DataController {
         if (! $this->pages ) {
             Page::setNamespace( 'tpc' );
 
-            $this->pages[] = new Page( 'dashboard', '', __( 'Dashboard', 'the-permalinks-cascade' ),
+            $this->pages[] = new Page( 'dashboard', 'tpc-dashboard', __( 'Dashboard', 'the-permalinks-cascade' ),
                                        __( 'Dashboard', 'the-permalinks-cascade' ), 'DashboardPageView', 'DashboardController' );
             
             if ( $include_non_active || $this->plugin->isSitemapActive( 'site_tree' ) ) {
-                $this->pages[] = new Page( 'site_tree', '', __( 'Site Tree Settings', 'the-permalinks-cascade' ), 
+                $this->pages[] = new Page( 'site_tree', 'tpc-dashboard', __( 'Site Tree Settings', 'the-permalinks-cascade' ), 
                                            __( 'Site Tree Settings', 'the-permalinks-cascade' ), 'PageView', 'PageController' );
             }
 
-            $this->pages[] = new Page( 'advanced', '', __( 'Advanced Settings', 'the-permalinks-cascade' ), 
+            $this->pages[] = new Page( 'advanced', 'tpc-dashboard', __( 'Advanced Settings', 'the-permalinks-cascade' ), 
                                        __( 'Advanced Settings', 'the-permalinks-cascade' ), 'PageView', 'PageController' );
         }
 

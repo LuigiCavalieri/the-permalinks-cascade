@@ -24,12 +24,6 @@ class Page {
 	 * @since 1.0
 	 * @var string
 	 */
-	protected $menuID;
-	
-	/**
-	 * @since 1.0
-	 * @var string
-	 */
 	protected $title;
 	
 	/**
@@ -68,21 +62,25 @@ class Page {
 	 * @since 1.0
      *
      * @param string $id
-     * @param string $menu_id
+     * @param string $parent_slug
      * @param string $title
      * @param string $menu_title
      * @param string $view_class      
      * @param string $controller_class
 	 */
-	public function __construct( $id, $menu_id, $title, 
+	public function __construct( $id, $parent_slug, $title, 
                                  $menu_title, $view_class, $controller_class )
     {
         $this->id              = $id;
-		$this->menuID	       = $menu_id;
 		$this->title	       = $title;
 		$this->menuTitle       = $menu_title;
         $this->viewClass       = $view_class;
         $this->controllerClass = $controller_class;
+
+        /**
+         * @since 2.0.3
+         */
+        $this->parentSlug = apply_filters( 'tpc_admin_page_parent_slug', $parent_slug, $id );
 	}
 	
     /**
@@ -99,14 +97,6 @@ class Page {
      */
     public function namespacedID() {
         return ( self::$namespace . '-' . $this->id ); 
-    }
-
-    /**
-     * @since 1.0
-     * @return string
-     */
-    public function menuID() {
-    	return $this->menuID; 
     }
 
     /**
@@ -146,16 +136,7 @@ class Page {
      * @return string
      */
     public function parentSlug() {
-        if (! $this->parentSlug ) {
-            if ( false === strpos( $this->menuID, '.php' ) ) {
-                $this->parentSlug = 'admin.php';
-            }
-            else {
-                $this->parentSlug = $this->menuID;
-            }
-        }
-        
-        return $this->parentSlug; 
+        return $this->parentSlug;
     }
 }
 

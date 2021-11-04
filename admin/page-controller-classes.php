@@ -184,10 +184,16 @@ class PageController implements PageViewDelegateProtocol {
             if ( isset( $arguments['action'] ) ) {
                 $arguments['tpc_nonce'] = wp_create_nonce( $arguments['action'] );
             }
-        } 
+        }
 
+        if ( '.php' === substr( $page->parentSlug(), -4 ) ) {
+            $admin_url = admin_url( $page->parentSlug() );
+        }
+        else {
+            $admin_url = admin_url( 'admin.php' );
+        }
 
-        return add_query_arg( $arguments, admin_url( $page->parentSlug() ) );
+        return add_query_arg( $arguments, $admin_url );
     }
     
     /**

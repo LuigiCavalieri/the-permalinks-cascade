@@ -34,14 +34,6 @@ final class AdminController {
     private $currentTPCAdminPageID = '';
 
     /**
-     * Local copy of the global $pagenow.
-     *
-     * @since 1.0
-     * @var string
-     */
-    private $wpAdminPageID;
-
-    /**
      * @since 1.0
      * @param string
      */
@@ -52,11 +44,8 @@ final class AdminController {
      * @param object $plugin
      */
     public function __construct( $plugin ) {
-        global $pagenow;
-
         $this->plugin         = $plugin;
         $this->db             = $plugin->db();
-        $this->wpAdminPageID  = $pagenow;
         $this->dataController = $plugin->invokeGlobalObject( 'DataController' );
     }
 
@@ -169,7 +158,7 @@ final class AdminController {
 
         $page = $this->dataController->page( $page_id );
         
-        if ( !( $page && ( $page->parentSlug() == $this->wpAdminPageID ) ) ) {
+        if (! $page ) {
             wp_die( __( 'Request sent to a non existent page.', 'the-permalinks-cascade' ) );
         }
 
@@ -217,10 +206,12 @@ final class AdminController {
      * @since 1.0
      */
     private function registerActions() {
+        global $pagenow;
+
         add_action( 'admin_menu', array( $this, 'registerAdminPages' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueueStylesAndScripts' ) );
 
-        switch ( $this->wpAdminPageID ) {
+        switch ( $pagenow ) {
             case 'post.php':
             case 'post-new.php':
                 $this->plugin->load( 'admin/field-view.class.php' );
@@ -347,20 +338,23 @@ final class AdminController {
      * @since 1.0
      */
     public function registerAdminPages() {
-        $pages              = $this->dataController->pages( false );
-        $first_page_menu_id = $pages[0]->namespacedID();
+        $pages     = $this->dataController->pages( false );
+        $dashboard = $pages[0];
+        
+        if ( $dashboard->namespacedID() === $dashboard->parentSlug() ) {
+            $menu_title_ns = '';
 
-        add_menu_page( 'The Permalinks Cascade', 'The Permalinks Cascade', 'manage_options', $first_page_menu_id, 
-                       '__return_false', $this->getBase64MenuIcon(), 90 );
+            add_menu_page( 'The Permalinks Cascade', 'The Permalinks Cascade', 'manage_options', $dashboard->namespacedID(), 
+                           '__return_false', $this->getBase64MenuIcon(), 90 );
+        }
+        else {
+            $menu_title_ns = 'TPC - ';
+        }
 
         foreach ( $pages as $page ) {
-            $menu_page_id = $page->namespacedID();
+            $page_ns_id = $page->namespacedID();
             
-            if ( 
-                isset( $_GET['page'] ) && 
-                ( $menu_page_id == $_GET['page'] ) && 
-                ( $page->parentSlug() == $this->wpAdminPageID )
-            ) {
+            if ( isset( $_GET['page'] ) && ( $page_ns_id == $_GET['page'] ) ) {
                 $this->plugin->load( 'admin/field-view.class.php' );
                 $this->plugin->load( 'admin/page-view.class.php' );
                 $this->plugin->load( 'admin/page-view-delegate-protocols.php' );
@@ -370,7 +364,7 @@ final class AdminController {
                     $this->plugin->load( 'admin/' . $page->id() . '-page-view.class.php' );
                 }
 
-                $this->currentTPCAdminPageID = $menu_page_id;
+                $this->currentTPCAdminPageID = $page_ns_id;
 
                 $pageController     = PageController::makeController( $page, $this->plugin, $this->dataController );
                 $menu_page_callback = array( $pageController->loadPageView(), 'display' );
@@ -381,8 +375,10 @@ final class AdminController {
                 $menu_page_callback = '__return_false';
             }
 
-            add_submenu_page( $first_page_menu_id, $page->title(), $page->menuTitle(), 'manage_options', 
-                              $menu_page_id, $menu_page_callback );
+            $menu_title = $menu_title_ns . $page->menuTitle();
+
+            add_submenu_page( $page->parentSlug(), $page->title(), $menu_title, 'manage_options', 
+                              $page_ns_id, $menu_page_callback );
         }
     }
 

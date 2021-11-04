@@ -141,12 +141,11 @@ final class WPMLModule {
             case 'post-new.php':
                 add_filter( 'tpc_ping_controller_can_ping', array( $this, 'tpcPingControllerCanPing' ), 10, 3 );
                 break;
-            case 'admin.php':
+            default:
                 add_filter( 'tpc_dashboard_page_data_pages_dropdown_query', 
                             array( $this, 'tpcDashboardPageDataPagesDropdownQuery' ) );
                 add_filter( 'tpc_data_controller_sanitised_option_value',
                             array( $this, 'tpcDataControllerSanitisedOptionValue' ), 10, 3 );
-                break;
         }
     }
 
