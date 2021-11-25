@@ -809,4 +809,3 @@ class OptionsFilter {
         return ( preg_match( $pattern, $this->value ) === 1 );
     }
 }
-?>

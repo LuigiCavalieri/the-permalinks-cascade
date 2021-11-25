@@ -395,4 +395,3 @@ final class Core extends BasePlugin {
         do_action( 'tpc_did_flush_cached_data', $sitemap_slug );
     }
 }
-?>

@@ -96,4 +96,3 @@ abstract class GoogleSitemapBuilder extends BuilderCore {
         return htmlspecialchars( $attribute, ENT_QUOTES );
     }
 }
-?>

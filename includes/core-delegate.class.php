@@ -594,4 +594,3 @@ final class CoreDelegate {
         }
     }
 }
-?>

@@ -109,4 +109,3 @@ final class NewsmapBuilder extends GoogleSitemapBuilder {
         return (bool) $this->rawQueriedPosts;
     }
 }
-?>

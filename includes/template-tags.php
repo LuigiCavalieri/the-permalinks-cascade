@@ -31,4 +31,3 @@ function tpc_get_hyperlist( $type, $arguments = array() ) {
 
     return $hyperlistController->getHyperlist( $type, $arguments );
 }
-?>

@@ -211,4 +211,3 @@ $this->registerSection( new Section( __( "Authors' Pages", 'the-permalinks-casca
         __( 'Comma-separated list of nicknames.', 'the-permalinks-cascade' ), ''
     )
 ) ));
-?>

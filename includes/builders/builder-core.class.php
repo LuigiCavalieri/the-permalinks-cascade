@@ -177,4 +177,3 @@ abstract class BuilderCore {
         return $this->buildingCapacity - $this->numberOfItems;
     }
 }
-?>

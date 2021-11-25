@@ -53,4 +53,3 @@ else {
 
     \ThePermalinksCascade\Core::launch( __DIR__ );
 }
-?>

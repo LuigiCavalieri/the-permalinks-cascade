@@ -33,4 +33,3 @@ $this->registerGlobalObjectResources( 'SiteTreeBuilder', array(
 ));
 
 $this->registerGlobalObjectResources( 'HyperlistController', array( 'includes/hyperlist-controller.class.php' ) );
-?>

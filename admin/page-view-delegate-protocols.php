@@ -75,4 +75,3 @@ interface DashboardDelegateProtocol {
      */
     public function dashboardDidDisplayForms( $dashboardPageView );
 }
-?>

@@ -194,4 +194,3 @@ class PageView extends View {
 		$this->fieldView->init( $value, $section_id );
 	}
 }
-?>

@@ -385,4 +385,3 @@ final class SitemapBuilder
         }
     }
 }
-?>

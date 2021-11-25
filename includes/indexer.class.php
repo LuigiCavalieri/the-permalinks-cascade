@@ -632,4 +632,3 @@ final class Indexer {
         return ( $this->requestedSitemapNumber <= $number_of_sitemaps );
     }
 }
-?>

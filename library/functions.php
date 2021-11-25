@@ -109,4 +109,3 @@ function truncate_sentence( $sentence, $length ) {
 
     return $sentence;
 }
-?>

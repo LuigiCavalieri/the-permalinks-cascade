@@ -122,4 +122,3 @@ final class PingLogEntry {
         return $this->responseMessage;
     }
 }
-?>

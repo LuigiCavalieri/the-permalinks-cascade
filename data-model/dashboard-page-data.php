@@ -606,4 +606,3 @@ $newsmap_section->addField( new Field( 'max_permalinks_in_newsmap', 'NumberField
                                        '', 1000, array( 'min_value' => 100, 'max_value' => 1000 ) ) );
 
 $this->registerSection( $newsmap_section );
-?>

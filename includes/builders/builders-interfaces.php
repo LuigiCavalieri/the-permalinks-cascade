@@ -82,4 +82,3 @@ interface SiteTreeBuilderInterface {
      */
     public function addContent( $string );
 }
-?>

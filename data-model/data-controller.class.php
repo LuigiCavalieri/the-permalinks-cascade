@@ -364,4 +364,3 @@ class DataController {
         return $defaults;
     }
 }
-?>

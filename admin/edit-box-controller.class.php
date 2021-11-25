@@ -402,4 +402,3 @@ final class EditBoxController {
         $wpdb->query( sprintf( $query_string, $wpdb->postmeta, $data_string ) );
     }
 }
-?>

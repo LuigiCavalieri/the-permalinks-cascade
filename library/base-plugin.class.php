@@ -523,4 +523,3 @@ abstract class BasePlugin {
         return $this->dirURL( $extless_filename . $this->minSuffix . '.' . $extension );
     }
 }
-?>

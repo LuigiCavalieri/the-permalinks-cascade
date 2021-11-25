@@ -42,4 +42,3 @@ if ( defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
     delete_option( $db->optionsID() );
 }
-?>

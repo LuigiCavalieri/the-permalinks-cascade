@@ -196,4 +196,3 @@ final class DashboardPageView extends PageView {
         }
     }
 }
-?>

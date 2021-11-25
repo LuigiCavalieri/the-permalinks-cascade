@@ -1116,4 +1116,3 @@ FONTS;
         return( '<p id="credit-note"><small>' . $note . '</small></p>' );
     }
 }
-?>

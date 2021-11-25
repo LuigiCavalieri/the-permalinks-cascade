@@ -54,4 +54,3 @@ final class ImageSitemapBuilder extends MediaSitemapBuilder {
         $this->output .= '</url>' . $this->lineBreak;
     }
 }
-?>

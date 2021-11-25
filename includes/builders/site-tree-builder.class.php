@@ -1442,4 +1442,3 @@ final class TaxonomyWalker extends BaseWalker {
             $output .= ' <span class="site-tree-posts-count">(' . (int) $object->count . ')</span>';
     }
 }
-?>

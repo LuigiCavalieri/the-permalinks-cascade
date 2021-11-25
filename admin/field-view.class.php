@@ -222,4 +222,3 @@ class NumberField extends FieldView {
         echo ' class="small-text">';
     }
 }
-?>

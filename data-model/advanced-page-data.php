@@ -56,4 +56,3 @@ $general_section->addField(
 );
 
 $this->registerSection( $general_section );
-?>

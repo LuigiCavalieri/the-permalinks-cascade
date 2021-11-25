@@ -68,4 +68,3 @@ final class VideoSitemapBuilder extends MediaSitemapBuilder {
         $this->output .= '</url>' . $this->lineBreak;
     }
 }
-?>

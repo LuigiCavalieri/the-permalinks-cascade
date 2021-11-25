@@ -766,4 +766,3 @@ final class WPMLModule {
         }
     }
 }
-?>

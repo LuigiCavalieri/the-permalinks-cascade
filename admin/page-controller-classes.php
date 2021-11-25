@@ -753,4 +753,3 @@ final class DashboardController
              '<a href="', esc_url( $this->plugin->pluginURI() ), '" id="tpc-go-pro-btn">Donate</a></aside>';
     }
 }
-?>

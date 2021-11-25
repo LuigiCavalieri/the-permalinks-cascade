@@ -458,4 +458,3 @@ final class Paginator {
         $this->counts[$counter->content_type] = $counter->count;
     }
 }
-?>

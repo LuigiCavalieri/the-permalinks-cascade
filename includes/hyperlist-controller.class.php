@@ -423,4 +423,3 @@ final class HyperlistController {
         return true;
     }
 }
-?>

@@ -663,4 +663,3 @@ class DB {
         return $query_string;
     }
 }
-?>

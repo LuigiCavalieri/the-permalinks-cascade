@@ -210,4 +210,3 @@ abstract class MediaSitemapBuilder extends GoogleSitemapBuilder {
      */
     abstract protected function buildURLElement( $url );
 }
-?>

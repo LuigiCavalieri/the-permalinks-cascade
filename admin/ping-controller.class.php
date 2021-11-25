@@ -325,4 +325,3 @@ final class PingController {
         return sprintf( _n( 'about 1 minute', '%d minutes', $minutes, 'the-permalinks-cascade' ), $minutes );
     }
 }
-?>
