@@ -110,7 +110,7 @@ class StylesheetBuilder {
 
         $th_url = esc_html__( 'Sitemap URL', 'the-permalinks-cascade' );
 
-        return <<<XSL
+        return <<<_XSL
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- License and copyrights are the same as the {$this->plugin->name()} package -->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -270,7 +270,7 @@ for ( var i = 1; i < rows.length; i++ ) {
 </html>
 </xsl:template>
 </xsl:stylesheet>
-XSL;
+_XSL;
     }
 
     /**
@@ -327,7 +327,7 @@ XSL;
             $extra_xsl_body  .= $column['xsl_body'] . "\n\n";
         }
 
-        return <<<XSL
+        return <<<_XSL
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- License and copyrights are the same as the {$this->plugin->name()} package -->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9" {$extra_xmlns}>
@@ -494,7 +494,7 @@ for ( var i = 1; i < rows.length; i++ ) {
 </html>
 </xsl:template>
 </xsl:stylesheet>
-XSL;
+_XSL;
     }
 
     /**
@@ -507,7 +507,7 @@ XSL;
         $message     = esc_html__( 'This document is part of %1$sthe collection of sitemaps%2$s available for this website.', 'the-permalinks-cascade' );
         $intro       = sprintf( $message, $opening_tag, '</a>' );
 
-        return <<<XSL
+        return <<<_XSL
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- License and copyrights are the same as the {$this->plugin->name()} package -->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -684,7 +684,7 @@ img,
 </html>
 </xsl:template>
 </xsl:stylesheet>
-XSL;
+_XSL;
     }
 
     /**
@@ -697,7 +697,7 @@ XSL;
         $message     = esc_html__( 'This document is part of %1$sthe collection of sitemaps%2$s available for this website.', 'the-permalinks-cascade' );
         $intro       = sprintf( $message, $opening_tag, '</a>' );
 
-        return <<<XSL
+        return <<<_XSL
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- License and copyrights are the same as the {$this->plugin->name()} package -->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
@@ -1077,14 +1077,14 @@ td {
 </html>
 </xsl:template>
 </xsl:stylesheet>
-XSL;
+_XSL;
     }
 
     /**
      * @since 1.0
      */
     protected function getFontFaces() {
-        return <<<FONTS
+        return <<<_FONTS
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -1103,7 +1103,7 @@ XSL;
   font-weight: 700;
   src: url({$this->plugin->dirURL('resources/fonts/ubuntu-bold.ttf')}) format('truetype');
 }
-FONTS;
+_FONTS;
     }
 
     /**
