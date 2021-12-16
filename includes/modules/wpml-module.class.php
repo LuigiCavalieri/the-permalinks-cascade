@@ -581,7 +581,7 @@ final class WPMLModule {
     public function tpcSitemapBuilderDidQueryPosts( $ids ) {
         global $wpdb;
 
-        $ids_list   = implode( $ids, ',' );
+        $ids_list   = implode( ',', $ids );
         $meta_keys  = $this->db->prepareMetaKey( 'exclude_from_sitemap' );
         $meta_keys .= ',';
         $meta_keys .= $this->db->prepareMetaKey( 'is_ghost_page' );
