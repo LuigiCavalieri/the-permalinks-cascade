@@ -7,7 +7,7 @@ Tags: html site map, google sitemap, news sitemap, lists, blocks
 Requires at least: 5.8
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -144,12 +144,16 @@ No, it cannot. The use of such metadata has become obsolete by now.
 
 == Upgrade Notice ==
 
-= 2.0.3 =
+= 2.0.4 =
 
-Added a superuser mini-feature.
+Bugfix.
 
 
 == Changelog ==
+
+= 2.0.4 (17 December 2021) =
+
+Fixed a bug causing a fatal error when loading the Google Sitemap on WordPress+WPML istallations running on PHP 8.  
 
 = 2.0.3 (4 November 2021) =
 
