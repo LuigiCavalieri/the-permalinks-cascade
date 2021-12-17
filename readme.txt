@@ -153,7 +153,7 @@ Bugfix.
 
 = 2.0.4 (17 December 2021) =
 
-Fixed a bug causing a fatal error when loading the Google Sitemap on WordPress+WPML istallations running on PHP 8.  
+Fixed a bug that caused a fatal error when loading the Google Sitemap on WordPress+WPML istallations running on PHP 8.  
 
 = 2.0.3 (4 November 2021) =
 
