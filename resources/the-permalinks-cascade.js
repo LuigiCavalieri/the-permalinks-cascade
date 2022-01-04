@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Luigi Cavalieri.
+ * Copyright 2022 Luigi Cavalieri.
  * @license GPL v3.0 (https://opensource.org/licenses/GPL-3.0).
  * *************************************************************** */
 

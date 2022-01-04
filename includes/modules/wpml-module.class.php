@@ -3,7 +3,7 @@ namespace ThePermalinksCascade;
 
 /**
  * @package The Permalinks Cascade
- * @copyright Copyright 2021 Luigi Cavalieri.
+ * @copyright Copyright 2022 Luigi Cavalieri.
  * @license https://opensource.org/licenses/GPL-3.0 GPL v3.0
  *
  * @since 2.0

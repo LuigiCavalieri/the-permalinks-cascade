@@ -3,7 +3,7 @@ namespace ThePermalinksCascade;
 
 /**
  * @version 1.3.1
- * @copyright Copyright 2021 Luigi Cavalieri.
+ * @copyright Copyright 2022 Luigi Cavalieri.
  * @license https://opensource.org/licenses/GPL-3.0 GPL v3.0
  *
  * A base class upon which can be built the plugin's main class.

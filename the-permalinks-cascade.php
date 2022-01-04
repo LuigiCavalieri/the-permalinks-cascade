@@ -13,11 +13,11 @@
  *
  * @package The Permalinks Cascade
  * @version 2.1
- * @copyright Copyright 2021 Luigi Cavalieri.
+ * @copyright Copyright 2022 Luigi Cavalieri.
  * @license https://opensource.org/licenses/GPL-3.0 GPL v3.0
  * 
  * 
- * Copyright 2021 Luigi Cavalieri.
+ * Copyright 2022 Luigi Cavalieri.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
