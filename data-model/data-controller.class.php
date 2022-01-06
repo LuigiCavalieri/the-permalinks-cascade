@@ -64,18 +64,26 @@ class DataController {
      */
     public function pages( $include_non_active = true ) {
         if (! $this->pages ) {
+            $pages = array();
+
             Page::setNamespace( 'tpc' );
 
-            $this->pages[] = new Page( 'dashboard', 'tpc-dashboard', __( 'Dashboard', 'the-permalinks-cascade' ),
-                                       __( 'Dashboard', 'the-permalinks-cascade' ), 'DashboardPageView', 'DashboardController' );
+            $pages[] = new Page( 'dashboard', 'tpc-dashboard', __( 'Dashboard', 'the-permalinks-cascade' ),
+                                 __( 'Dashboard', 'the-permalinks-cascade' ), 'DashboardPageView', 'DashboardController' );
             
             if ( $include_non_active || $this->plugin->isSitemapActive( 'site_tree' ) ) {
-                $this->pages[] = new Page( 'site_tree', 'tpc-dashboard', __( 'Site Tree Settings', 'the-permalinks-cascade' ), 
-                                           __( 'Site Tree Settings', 'the-permalinks-cascade' ), 'PageView', 'PageController' );
+                $pages[] = new Page( 'site_tree', 'tpc-dashboard', __( 'Site Tree Settings', 'the-permalinks-cascade' ), 
+                                     __( 'Site Tree Settings', 'the-permalinks-cascade' ), 'PageView', 'PageController' );
             }
 
-            $this->pages[] = new Page( 'advanced', 'tpc-dashboard', __( 'Advanced Settings', 'the-permalinks-cascade' ), 
-                                       __( 'Advanced Settings', 'the-permalinks-cascade' ), 'PageView', 'PageController' );
+            $pages[] = new Page( 'advanced', 'tpc-dashboard', __( 'Advanced Settings', 'the-permalinks-cascade' ), 
+                                 __( 'Advanced Settings', 'the-permalinks-cascade' ), 'PageView', 'PageController' );
+
+            if (! $include_non_active ) {
+                return $pages;
+            }
+
+            $this->pages = $pages;
         }
 
         return $this->pages;
