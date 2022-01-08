@@ -3,35 +3,33 @@
  * @license GPL v3.0 (https://opensource.org/licenses/GPL-3.0).
  * *************************************************************** */
 
-(function($) {
-    var wp_inline_edit = inlineEditPost.edit;
+( ( $ ) => {
+    let wp_inline_edit = inlineEditPost.edit;
 
-    inlineEditPost.edit = function( id ) {
+    inlineEditPost.edit = function ( id ) {
         wp_inline_edit.apply( this, arguments );
 
-        var topic_select = document.getElementById( 'tpc-topic-id' );
+        const topic_select = document.getElementById( 'tpc-topic-id' );
 
         if (! topic_select ) {
-            return false;
+            return null;
         }
 
-        var post_id = 0;
+        let post_id = 0;
 
         if ( 'object' == typeof( id ) ) {
-            post_id = parseInt( this.getId( id ) );
+            post_id = parseInt( this.getId( id ), 10 );
         }
 
         if ( post_id <= 0 ) {
-            return false;
+            return null;
         }
         
-        var option_selected = false;
-        var post_row        = document.getElementById( 'post-' + post_id );
-        var topic_name      = post_row.getElementsByClassName( 'column-taxonomy-tpc_topic' )[0].innerText;
+        let option_selected = false;
+        const post_row      = document.getElementById( 'post-' + post_id );
+        const topic_name    = post_row.getElementsByClassName( 'column-taxonomy-tpc_topic' )[0].innerText;
 
-        for ( var i = 0; i < topic_select.options.length; i++ ) {
-            var option = topic_select.options[i];
-
+        for ( let option of topic_select.options ) {
             if ( option.innerText == topic_name ) {
                 option_selected = true;
 
@@ -45,30 +43,26 @@
         if (! option_selected ) {
             topic_select.options[0].setAttribute( 'selected', 'selected' );
         }
-
-        return true;
     };
 
-    $( document ).on( 'click', '#bulk_edit', function() {
-        var post_ids    = [];
-        var bulk_titles = document.getElementById( 'bulk-titles' );
+    $( document ).on( 'click', '#bulk_edit', () => {
+        let post_ids      = [];
+        const bulk_titles = document.getElementById( 'bulk-titles' );
         
-        for ( var i = 0; i < bulk_titles.childNodes.length; i++ ) {
-            var title = bulk_titles.childNodes[i];
-            
+        for ( let title of bulk_titles.childNodes ) {
             post_ids.push( title.id.replace( /^(ttle)/i, '' ) );
         }
 
-        var nonce        = document.getElementById( 'tpc-nonce' ).value;
-        var data         = $( '#tpc-bulk-edit-box select' ).serializeArray();
-        var ajax_request = {
+        const nonce        = document.getElementById( 'tpc-nonce' ).value;
+        const data         = $( '#tpc-bulk-edit-box select' ).serializeArray();
+        const ajax_request = {
                  action: 'handleTPCAdminAjaxRequest',
              tpc_action: 'tpc_bulk_edit',
               tpc_nonce: nonce,
-               post_ids: post_ids,
-                   data: data
+               post_ids,
+                   data
         };
 
         jQuery.post( ajaxurl, ajax_request );
     });
-})(jQuery);
+})( jQuery );
