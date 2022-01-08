@@ -392,17 +392,28 @@ final class AdminController {
         
         switch ( $current_admin_section_id ) {
             case 'edit.php':
-                $js_file_url  = $this->plugin->getMinScriptURL( 'resources/edit-box', 'js' );
-
-                wp_enqueue_script( 'the-permalinks-cascade', $js_file_url, array(), $version, true );
+                wp_enqueue_script( 
+                    'the-permalinks-cascade',
+                    $this->plugin->dirURL( 'resources/edit-box.js' ),
+                    array(),
+                    $version,
+                    true
+                );
                 break;
 
             case 'tpc-admin':
-                $css_file_url = $this->plugin->getMinScriptURL( 'resources/the-permalinks-cascade', 'css' );
-                $js_file_url  = $this->plugin->getMinScriptURL( 'resources/the-permalinks-cascade', 'js' );
-                
-                wp_enqueue_style( 'the-permalinks-cascade', $css_file_url, null, $version );
-                wp_enqueue_script( 'the-permalinks-cascade', $js_file_url, array( 'jquery-ui-sortable' ), $version );
+                wp_enqueue_style(
+                    'the-permalinks-cascade',
+                    $this->plugin->dirURL( 'resources/the-permalinks-cascade.css' ),
+                    null,
+                    $version
+                );
+                wp_enqueue_script(
+                    'the-permalinks-cascade',
+                    $this->plugin->dirURL( 'resources/the-permalinks-cascade.js' ),
+                    array( 'jquery-ui-sortable' ),
+                    $version
+                );
                 break;
         }
     }
