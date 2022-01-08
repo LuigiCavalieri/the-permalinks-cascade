@@ -19,12 +19,6 @@ final class HyperlistController {
      * @since 2.0
      * @var array
      */
-    private $blockAttributes = array();
-
-    /**
-     * @since 2.0
-     * @var array
-     */
     private $contentTypes;
 
     /**
@@ -62,11 +56,7 @@ final class HyperlistController {
      * @param object $plugin
      */
     public function __construct( $plugin ) {
-        $this->plugin     = $plugin;
-        $this->blockTypes = array(
-            'page' => __( 'Pages', 'the-permalinks-cascade' ),
-            'post' => __( 'Posts', 'the-permalinks-cascade' )
-        );
+        $this->plugin = $plugin;
     }
 
     /**
@@ -75,25 +65,18 @@ final class HyperlistController {
      * @since 2.0
      */
     public function wpDidFinishLoading() {
-        wp_register_script(
-            'the-permalinks-cascade-blocks',
-            $this->plugin->getMinScriptURL( 'includes/blocks/index', 'js' ),
-            array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-data' ),
-            $this->plugin->version(),
-            true
-        );
-
-        $this->loadBlockAttributes();
+        $this->loadContentTypes();
+        $this->populateBlockTypesArray();
 
         foreach ( $this->blockTypes as $id => $title ) {
-            register_block_type( "the-permalinks-cascade/{$id}", array(
-                'api_version'     => 2,
+            register_block_type_from_metadata( $this->plugin->dirPath( "admin/blocks/{$id}-block.json" ), array(
                 'title'           => $title,
-                'category'        => 'the-permalinks-cascade',
-                'editor_script'   => 'the-permalinks-cascade-blocks',
-                'render_callback' => array( $this, str_replace( '-', '_', "doBlock_{$id}" ) ),
-                'attributes'      => $this->blockAttributes[$id]
+                'render_callback' => array( $this, str_replace( '-', '_', "doBlock_{$id}" ) )
             ));
+        }
+
+        if (! is_admin() ) {
+            return null;
         }
 
         add_filter( 'block_categories_all', function( $categories ) {
@@ -105,11 +88,11 @@ final class HyperlistController {
             return array_merge( $categories, array( $tpc_category ) );
         });
 
-        $inline_script  = 'ThePermalinksCascade.registerBlocks( { showCustomPostBlock: ';
-        $inline_script .= ( isset( $this->blockTypes['custom-post'] )? 'true' : 'false' );
-        $inline_script .= ' } );';
-        
-        wp_add_inline_script( 'the-permalinks-cascade-blocks', $inline_script );
+        add_action( 'admin_print_scripts', function() {
+            echo "\n<script>const TPC_Globals = { showCustomPostBlock: ";
+            echo ( isset( $this->blockTypes['custom-post'] ) ? 'true' : 'false' ); 
+            echo " };</script>\n";
+        });
     }
 
     /**
@@ -163,127 +146,30 @@ final class HyperlistController {
      * @return string
      */
     public function doBlock_custom_post( $attributes, $the_content ) {
-        if ( !isset( $attributes['post_slug'] ) || 'none' == $attributes['post_slug'] ) {
-            if ( $this->isGutenbergEditor() ) {
-                $message = __( 'please, select a Post Type from the settings panel.', 'the-permalinks-cascade' );
+        if ( isset( $attributes['post_slug'] ) && 'none' != $attributes['post_slug'] ) {
+            $this->doingBlock = true;
 
-                return '<p><em><strong style="color:#d75b00">' 
-                     . __( 'Notice:', 'the-permalinks-cascade' ) 
-                     . '</strong> ' . $message . '</em></p>';
-            }
-
-            return '';
+            return $this->getHyperlist( $attributes['post_slug'], $attributes );
         }
 
-        $this->doingBlock = true;
-
-        return $this->getHyperlist( $attributes['post_slug'], $attributes );
+        return '';
     }
 
-    /**
-     * @since 2.0
-     * @return bool
-     */
-    private function isGutenbergEditor() {
-        return (
-            defined( 'REST_REQUEST' ) && 
-            true === REST_REQUEST && 
-            'edit' === filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING )
-        );
-    }
 
     /**
-     * @since 2.0
-     * @return bool
+     * @since 2.1
      */
-    private function loadBlockAttributes() {
-        $sections = $this->plugin->invokeGlobalObject( 'DataController' )->loadPageSections( 'site_tree', true );
-        
-        $default_str_attr   = array(
-            'type'    => 'string',
-            'default' => ''
+    private function populateBlockTypesArray() {
+        $this->blockTypes = array(
+            'page' => __( 'Pages', 'the-permalinks-cascade' ),
+            'post' => __( 'Posts', 'the-permalinks-cascade' )
         );
-        $default_limit_attr = array(
-            'type'    => 'string',
-            'default' => '100'
-        );
-
-        foreach ( $this->blockTypes as $content_type_id => $title ) {
-            $fields = $sections[$content_type_id]->getFieldsFromDictionary();
-
-            foreach ( $fields as $field ) {
-                switch ( $field->viewClass() ) {
-                    case 'Checkbox':
-                        $attr_type = 'boolean';
-                        break;
-
-                    case 'Dropdown':
-                        $attr_type = ( $field->dataType() == 'boolean_choice' ? 'boolean' : 'string' );
-                        break;
-
-                    default:
-                        $attr_type = 'string';
-                        break;
-                }
-
-                $this->blockAttributes[$content_type_id][$field->id()] = array(
-                    'type'    => $attr_type,
-                    'default' => $field->defaultValue()
-                );
-            }
-
-            $this->blockAttributes[$content_type_id]['limit'] = $default_limit_attr;
-            $this->blockAttributes[$content_type_id]['exclude'] = $default_str_attr;
-            $this->blockAttributes[$content_type_id]['include_only'] = $default_str_attr;
-        }
-
-        $this->loadContentTypes();
 
         if ( count( $this->postTypes ) > 2 ) {
-            $this->blockTypes['custom-post']      = __( 'Custom Posts', 'the-permalinks-cascade' );
-            $this->blockAttributes['custom-post'] = array(
-                'post_slug'    => array(
-                    'type'    => 'string',
-                    'default' => 'none'
-                ),
-                'title'        => $default_str_attr,
-                'order_by'     => array(
-                    'type'    => 'string',
-                    'default' => 'post_title'
-                ),
-                'hierarchical' => array(
-                    'type'    => 'string',
-                    'default' => '1'
-                ),
-                'limit'        => $default_limit_attr,
-                'exclude'      => $default_str_attr,
-                'include_only' => $default_str_attr,
-            );
+            $this->blockTypes['custom-post'] = __( 'Custom Posts', 'the-permalinks-cascade' );
         }
 
-        $this->blockTypes['taxonomy']      = __( 'Terms', 'the-permalinks-cascade' );
-        $this->blockAttributes['taxonomy'] = array(
-            'taxonomy_slug'    => array(
-                'type'    => 'string',
-                'default' => 'category'
-            ),
-            'title'        => $default_str_attr,
-            'show_count'   => array(
-                'type'    => 'boolean',
-                'default' => false
-            ),
-            'order_by'     => array(
-                'type'    => 'string',
-                'default' => 'name'
-            ),
-            'hierarchical' => array(
-                'type'    => 'string',
-                'default' => '1'
-            ),
-            'limit'        => $default_limit_attr,
-            'exclude'      => $default_str_attr,
-            'include_only' => $default_str_attr,
-        );
+        $this->blockTypes['taxonomy'] = __( 'Terms', 'the-permalinks-cascade' );
     }
 
     /**
@@ -353,11 +239,10 @@ final class HyperlistController {
 
     /**
      * @since 2.0
-     * @return bool
      */
     private function loadContentTypes() {
         if ( $this->contentTypes ) {
-            return false;
+            return null;
         }
 
         $this->contentTypes = array(
@@ -384,17 +269,14 @@ final class HyperlistController {
         foreach ( $taxonomies as $taxonomy ) {
             $this->contentTypes[$taxonomy] = $taxonomy;
         }
-
-        return true;
     }
 
     /**
      * @since 2.0
-     * @return bool
      */
     private function loadDefaults() {
         if ( $this->defaults ) {
-            return false;
+            return null;
         }
 
         $defaults_for_page = $this->plugin->invokeGlobalObject( 'DataController' )->defaultsForPage( 'site_tree', '', true );
@@ -419,7 +301,5 @@ final class HyperlistController {
         }
 
         $this->defaults['page']['only_children_of'] = 0;
-
-        return true;
     }
 }

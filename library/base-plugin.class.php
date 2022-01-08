@@ -2,7 +2,7 @@
 namespace ThePermalinksCascade;
 
 /**
- * @version 1.3.1
+ * @version 1.3.2
  * @copyright Copyright 2022 Luigi Cavalieri.
  * @license https://opensource.org/licenses/GPL-3.0 GPL v3.0
  *
@@ -406,10 +406,12 @@ abstract class BasePlugin {
 
     /**
      * @since 1.0
+     * 
+     * @param string $path
      * @return string
      */
-    public function dirPath() {
-        return $this->dirPath;
+    public function dirPath( $path = '' ) {
+        return ( $this->dirPath . $path );
     }
 
     /**
@@ -431,7 +433,7 @@ abstract class BasePlugin {
             $this->dirURL = plugins_url( $this->dirName . '/' );
         }
 
-        return $this->dirURL . $path;
+        return ( $this->dirURL . $path );
     }
     
     /**
