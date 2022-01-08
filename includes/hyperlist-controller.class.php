@@ -69,7 +69,7 @@ final class HyperlistController {
         $this->populateBlockTypesArray();
 
         foreach ( $this->blockTypes as $id => $title ) {
-            register_block_type_from_metadata( $this->plugin->dirPath( "admin/blocks/{$id}-block.json" ), array(
+            register_block_type_from_metadata( $this->plugin->dirPath( "blocks/{$id}-block.json" ), array(
                 'title'           => $title,
                 'render_callback' => array( $this, str_replace( '-', '_', "doBlock_{$id}" ) )
             ));
