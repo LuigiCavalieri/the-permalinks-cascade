@@ -7,7 +7,7 @@ Tags: html site map, google sitemap, news sitemap, lists, blocks
 Requires at least: 5.8
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 2.0.4
+Stable tag: 2.1
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -144,16 +144,32 @@ No, it cannot. The use of such metadata has become obsolete by now.
 
 == Upgrade Notice ==
 
-= 2.0.4 =
+= 2.1 =
 
-Bugfix.
+Re-engineered Blocks-related code, plus improvements and bugfixes.
 
 
 == Changelog ==
 
+= 2.1 (10 January 2022) =
+
+Improved:
+
+* Re-engineered Blocks-related code for improved compatibility with future versions of WordPress.
+* Updated JS scripts to ECMAScript 6.
+
+Changed:
+
+* CSS and JavaScript files are no longer minified.
+
+Fixed:
+
+* Gutenberg Blocks could not be inserted in theme's widgetized areas.
+* A PHP warning could appear in debug mode while using the WordPress Editor.
+
 = 2.0.4 (17 December 2021) =
 
-Fixed a bug that caused a fatal error when loading the Google Sitemap on WordPress+WPML istallations running on PHP 8.  
+Fixed a bug that caused a fatal error when loading the Google Sitemap on WordPress+WPML installations running on PHP 8.  
 
 = 2.0.3 (4 November 2021) =
 
