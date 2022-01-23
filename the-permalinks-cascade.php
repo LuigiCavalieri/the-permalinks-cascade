@@ -3,7 +3,7 @@
  * Plugin Name: The Permalinks Cascade
  * Plugin URI: https://luigicavalieri.com/the-permalinks-cascade/
  * Description: Sitemaps, Hyper-lists and Beyond.
- * Version: 2.1
+ * Version: 2.1.1
  * Requires: 5.8
  * Author: Luigi Cavalieri
  * Author URI: https://luigicavalieri.com
@@ -12,7 +12,7 @@
  *
  *
  * @package The Permalinks Cascade
- * @version 2.1
+ * @version 2.1.1
  * @copyright Copyright 2022 Luigi Cavalieri.
  * @license https://opensource.org/licenses/GPL-3.0 GPL v3.0
  * 
