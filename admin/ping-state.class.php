@@ -112,12 +112,13 @@ final class PingState {
      * @since 1.0
      *
      * @param string $post_ID
-     * @param array $responses
+     * @param array $response
      */
-    public function update( $post_ID, $responses ) {
+    public function update( $post_ID, $response ) {
+        $_responses = array( 'google' => $response );
         $prev_response_was_failed = false;
         
-        foreach ( $responses as $search_engine_id => $response ) {
+        foreach ( $_responses as $search_engine_id => $response ) {
             if ( '200' === $response['status'] ) {
                 $this->latestTime = $response['time'];
 

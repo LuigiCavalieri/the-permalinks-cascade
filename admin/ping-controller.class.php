@@ -15,13 +15,9 @@ final class PingController {
     const MAX_LOG_ENTRIES = 30;
 
     /**
-     * @since 1.0
-     * @var array
+     * @since 2.2
      */
-    private $targets = array(
-        'google' => 'https://www.google.com/ping?sitemap=',
-        'bing'   => 'https://www.bing.com/ping?sitemap='
-    );
+    const TARGET_URL = 'https://www.google.com/ping?sitemap=';
 
     /**
      * @since 1.0
@@ -58,10 +54,10 @@ final class PingController {
     private $minTimeBetweenPings;
 
     /**
-     * @since 1.0
+     * @since 2.2
      * @var array
      */
-    private $responses = array();
+    private $response = array();
     
     /**
      * @since 1.0
@@ -130,36 +126,12 @@ final class PingController {
         }
 
         $pingState = $this->getPingState( $sitemap_id );
+        $post_id   = $is_automatic_ping ? $post->ID : 0;
+
+        $this->sendPing();
+
+        $pingState->update( $post_id, $this->response );
         
-        if ( $is_automatic_ping ) {
-            $post_id     = $post->ID;
-            $status_code = 'automatic_ping';
-        }
-        else {
-            $post_id     = 0;
-            $status_code = $pingState->getCode();
-        }
-
-        switch ( $status_code ) {
-            case 'no_google':
-                $this->sendPing( 'google' );
-                break;
-
-            case 'no_bing':
-                $this->sendPing( 'bing' );
-                break;
-
-            default:
-                $this->sendPing( 'google' );
-            
-                if ( 'sitemap' == $sitemap_id ) {
-                    $this->sendPing( 'bing' );
-                }
-                break;
-        }
-
-        $pingState->update( $post_id, $this->responses );
-
         $this->db->setNonAutoloadOption( 'pingState', $pingState, $sitemap_id );
         $this->updateLog( $sitemap_id, $post_id );
 
@@ -190,25 +162,24 @@ final class PingController {
 
     /**
      * @since 1.0
-     * @param string $search_engine_id
      */
-    private function sendPing( $search_engine_id ) {
+    private function sendPing() {
         $sitemap_id = $this->pingState->sitemapID();
 
-        $url  = $this->targets[$search_engine_id];
+        $url  = self::TARGET_URL;
         $url .= urlencode( $this->plugin->sitemapURL( $sitemap_id ) );
 
         $wp_response   = wp_remote_get( $url );
         $is_wp_error   = is_wp_error( $wp_response );
         $response_code = wp_remote_retrieve_response_code( $wp_response );
         
-        $this->responses[$search_engine_id]['time'] = time();
+        $this->response['time'] = time();
 
         if ( $is_wp_error ) {
-            $this->responses[$search_engine_id]['status'] = $wp_response->get_error_message();
+            $this->response['status'] = $wp_response->get_error_message();
         }
         else {
-            $this->responses[$search_engine_id]['status'] = (string) $response_code;
+            $this->response['status'] = (string) $response_code;
         }
     }
 
@@ -218,36 +189,26 @@ final class PingController {
      * @param int $post_id
      */
     private function updateLog( $sitemap_id, $post_id ) {
-        $response_index = 1;
-        $log            = $this->getLog( $sitemap_id );
-        $pingState      = $this->getPingState( $sitemap_id );
+        $log       = $this->getLog( $sitemap_id );
+        $pingState = $this->getPingState( $sitemap_id );
         
-        foreach ( $this->responses as $search_engine_id => $response ) {
-            if ( ( $response_index > 1 ) && ( 'succeeded' == $pingState->getCode() ) ) {
-                $log[0]->pushSearchEngineID( $search_engine_id );
-            }
-            else {
-                $logEntry = new PingLogEntry( $response['time'], $post_id );
-                $logEntry->pushSearchEngineID( $search_engine_id );
+        $logEntry = new PingLogEntry( $this->response['time'], $post_id );
+        $logEntry->pushSearchEngineID( 'google' );
 
-                if ( is_numeric( $response['status'] ) ) {
-                    $logEntry->setResponseCode( $response['status'] );
-                }
-                else {    
-                    $logEntry->setResponseCode( 'wp_error' );
-                    $logEntry->setResponseMessage( $response['status'] );
-                }
+        if ( is_numeric( $this->response['status'] ) ) {
+            $logEntry->setResponseCode( $this->response['status'] );
+        }
+        else {    
+            $logEntry->setResponseCode( 'wp_error' );
+            $logEntry->setResponseMessage( $this->response['status'] );
+        }
 
-                $num_entries = array_unshift( $log, $logEntry );
+        $num_entries = array_unshift( $log, $logEntry );
 
-                if ( $num_entries > self::MAX_LOG_ENTRIES ) {
-                    $last_entry_key = $num_entries - 1;
+        if ( $num_entries > self::MAX_LOG_ENTRIES ) {
+            $last_entry_key = $num_entries - 1;
 
-                    unset( $log[$last_entry_key] );
-                }
-            }
-
-            $response_index += 1;
+            unset( $log[$last_entry_key] );
         }
 
         $this->db->setNonAutoloadOption( 'pinging_log', $log, $sitemap_id );
@@ -273,29 +234,20 @@ final class PingController {
 
         switch ( $pingState->getCode() ) {
             case 'succeeded':
-                if ( 'sitemap' == $sitemap_id ) {
-                    $status_msg_format = __( 'The latest pings were sent on %s.', 'the-permalinks-cascade' );
-                }
-                else {
-                    $status_msg_format = __( 'Google was last pinged on %s.', 'the-permalinks-cascade' );
-                }
-
+            case 'no_bing':
                 $date = '<time>' . utilities\gmt_to_local_date( $pingState->getLatestTime() ) . '</time>';
 
                 $ping_info['ping_btn_title'] = __( 'Ping anew', 'the-permalinks-cascade' );
-                $ping_info['status_msg']     = sprintf( $status_msg_format, $date );
+                $ping_info['status_msg']     = sprintf(
+                    __( 'Google was last pinged on %s.', 'the-permalinks-cascade' ),
+                    $date
+                );
                 break;
 
             case 'no_google':
                 $ping_info['ping_failed']    = true;
                 $ping_info['ping_btn_title'] = __( 'Ping it again', 'the-permalinks-cascade' );
                 $ping_info['status_msg']     = __( "I couldn't ping Google.", 'the-permalinks-cascade' );
-                break;
-
-            case 'no_bing':
-                $ping_info['ping_failed']    = true;
-                $ping_info['ping_btn_title'] = __( 'Ping them again', 'the-permalinks-cascade' );
-                $ping_info['status_msg']     = __( "I couldn't ping Bing and Yahoo!", 'the-permalinks-cascade' );
                 break;
 
             case 'failed':
