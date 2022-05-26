@@ -5,9 +5,9 @@ Donate link: https://www.paypal.com/donate?hosted_button_id=GHSUR84FRCFDC
 Contributors: _luigi
 Tags: html site map, google sitemap, news sitemap, lists, blocks 
 Requires at least: 5.8
-Tested up to: 5.9
+Tested up to: 6.0
 Requires PHP: 7.0
-Stable tag: 2.1.1
+Stable tag: 2.2
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -50,7 +50,7 @@ An expanding website cannot welcome Googlebot but with a Sitemap Index: The Perm
 
 = Automated and Upon-request Pinging =
 
-The Permalinks Cascade can ping Google both on request, and automatically whenever a permalink is added to a Google Sitemap or to a News Sitemap. And when the subject of the notification is a Google Sitemap, there is always a second ping ready to reach Bing. A chronological log of the latest thirty pinging events is always at hand when you need it.
+The Permalinks Cascade can ping Google both on request, and automatically whenever a permalink is added to a Google Sitemap or to a News Sitemap. A chronological log of the latest thirty pinging events is always at hand when you need it.
 
 = Site Tree Pagination =
 
@@ -144,17 +144,22 @@ No, it cannot. The use of such metadata has become obsolete by now.
 
 == Upgrade Notice ==
 
-= 2.1.1 =
+= 2.2 =
 
-Bugfix.
+The plugin now pings only Google. More info in the changelog.
 
 
 == Changelog ==
 
+= 2.2 (26 May 2022) =
+
+As, time ago, Bing shut down its pinging service for XML Sitemaps, the plugin now pings only Google when the Pinging functionality is used.
+
+Note: the Pinging Log may still include old log entries about pings sent to Bing.
+
 = 2.1.1 (24 January 2022) =
 
 Fixed a bug that prevented the Google News Sitemap's stylesheet from loading.
-
 
 = 2.1 (10 January 2022) =
 
